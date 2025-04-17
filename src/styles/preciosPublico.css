@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+:root{
+    --fuente-principal:"Roboto", sans-serif;
+    --size-fuente-proveedor:12px;
+    --size-fuente-th:20px;
+
+    --color-rojo:red;
+    --color-verde:rgb(16, 122, 16);
+    --color-naranja:#FF9B27;
+    --azul-rey:rgb(6, 7, 65);
+
+    --blanco:white;
+    --negro:black;
+}
+th:nth-child(5) {
+    color: red; /* o el color que tú quieras */
+  }
+  
+*{
+    font-family: var(--fuente-principal);
+}
+header {
+    background-color: var(--azul-rey);
+    color: var(--blanco);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15vw;
+}
+header img {
+    
+    height: 100%;
+    object-fit: content; /* o 'contain' según lo que necesites */
+  }
+h2{
+    justify-content: center;
+    text-align: center;
+    text-transform: uppercase;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .header-table th{
+    color:var(--azul-rey);
+    background-color: var(--color-naranja);
+    font-size: var(--size-fuente-th);
+  }
+  #th-pr-pub{
+    color:var(--color-naranja);
+    background-color: var(--azul-rey);
+    width: 50%;
+  }
+  #iva,#ganancia{
+    width: 12.5%  ;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  input[type="number"] {
+    width: 100px;
+  }
+  .proveedor li{
+    list-style-type: none;
+    font-weight: bold;
+  }
+  .proveedor{font-size: var(--size-fuente-proveedor);}
+  #arboledas,#sagaji{color: var(--color-rojo);} #rolcar{color: var(--color-verde);} #ciosa{color: var(--color-naranja);} #apymsa{color: var(--azul-rey);}
+  .proveedor li img{
+    width: 70px;
+    padding: 9%;
+  }
+
+  
+  /* subrayar precios publico */
+  .valor-redondeado {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    color: #222;
+  }
+  
+  /* Línea animada debajo */
+  .valor-redondeado::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background-color: var(--color-naranja); /* color linea */
+    transition: width 0.5s ease;
+  }
+  
+  .valor-redondeado.animado::after {
+    width: 100%;
+  }
+  /*OTROS ESTILOS*/
+.precio-publico {
+  font-family: Arial, sans-serif;
+  padding: 5px;
+}
+
+.precio-normal {
+  color: #444;
+  font-size: 14px;
+}
+
+.precio-redondeado {
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.valor-redondeado.animado {
+  animation: brillo 0.4s ease-in-out;
+}
+
+@keyframes brillo {
+  0% { background-color: #ffff99; }
+  100% { background-color: transparent; }
+}
+
+.vacio {
+  color: #888;
+  font-style: italic;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+
+/*boton copy*/
+.copy-btn {
+  margin-left: 10px;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  border: none;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  background-color: #cfcfcf;
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Precio Público</title>
+ <link rel="stylesheet" href="./src/styles/preciosPublico.css">
+<link rel="icon" type="image/fav.icon" href="./src/media/calc.ico" >
+</head>
+<body>
+  <header>
+    <img src="./src/media/logoRefaSolis.png" alt="logo-refaccionariaSolis">
+    <h2>Calculadora de Precio Público</h2>
+  </header>
+  <table>
+    <thead>
+      <tr class="header-table">
+        <th>Proveedor</th>
+        <!-- <th id="iva">% IVA</th>
+        <th id="ganancia">% Ganancia</th> -->
+        <th>Precio Proveedor</th>
+        <th id="th-pr-pub">Precio Público</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        
+        <td id="arboledas" class="proveedor">
+            <li><img src="./src/media/arboledas.png" alt="arboledas"></li>
+            <!-- <li>ARBOLEDAS</li> -->
+        </td>
+        <!-- <td>16%</td>
+        <td>35%</td> -->
+        <td><input type="number" class="precio-input" data-ganancia="0.35" data-iva="0.16"></td>
+        <td class="precio-publico"></td>
+      </tr>
+      <tr>
+        <td id="rolcar" class="proveedor">
+            <li><img src="./src/media/rolcar.png" alt="rolcar"></li>
+            <!-- <li>ROLCAR</li></td> -->
+        <!-- <td>16%</td>
+        <td>35%</td> -->
+        <td><input type="number" class="precio-input" data-ganancia="0.35" data-iva="0.16"></td>
+        <td class="precio-publico"></td>
+      </tr>
+      <tr>
+        <td id="sagaji" class="proveedor">
+            <li><img src="./src/media/sagaji.png" alt="arboledas"></li>
+            <!-- <li>SAGAJI</li> -->
+        </td>
+        <!-- <td>16%</td>
+        <td>35%</td> -->
+        <td><input type="number" class="precio-input" data-ganancia="0.35" data-iva="0.16"></td>
+        <td class="precio-publico"></td>
+      </tr>
+      <tr>
+        <td id="ciosa" class="proveedor">
+            <li><img src="./src/media/ciosa.png" alt="arboledas"></li>
+            <!-- <li>CIOSA</li> -->
+        </td>
+        <!-- <td>16%</td>
+        <td>40%</td> -->
+        <td><input type="number" class="precio-input" data-ganancia="0.40" data-iva="0.16"></td>
+        <td class="precio-publico"></td>
+      </tr>
+      <tr>
+        <td id="apymsa" class="proveedor">
+            <li><img src="./src/media/apymsa.png" alt="arboledas"></li>
+            <!-- <li>APYMSA</li> -->
+        </td>
+        <!-- <td>16%</td>
+        <td>35%</td> -->
+        <td><input type="number" class="precio-input" data-ganancia="0.35" data-iva="0.16"></td>
+        <td class="precio-publico"></td>
+      </tr>
+    </tbody>
+  </table>
+  <script>
+    window.onload = function () {
+      const inputs = document.querySelectorAll(".precio-input");
+  
+      inputs.forEach((input, index) => {
+        input.value = '';
+        const ganancia = parseFloat(input.dataset.ganancia);
+        const iva = parseFloat(input.dataset.iva);
+  
+        input.addEventListener("input", () => {
+          if (input.value.trim() === '') {
+            limpiarOutput(input);
+          }
+        });
+  
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            calcularPrecio(input, ganancia, iva, index);
+          }
+        });
+  
+        input.addEventListener("change", () => {
+          calcularPrecio(input, ganancia, iva, index);
+        });
+  
+        if (input.value.trim() !== '') {
+          calcularPrecio(input, ganancia, iva, index);
+        }
+      });
+    };
+  
+    function limpiarOutput(input) {
+      const fila = input.closest('tr');
+      const celdaSalida = fila.querySelector('.precio-publico');
+      if (celdaSalida) {
+        celdaSalida.innerHTML = '<span class="vacio">Sin precio</span>';
+      }
+    }
+  
+    function calcularPrecio(input, ganancia, iva, index) {
+      const fila = input.closest('tr');
+      const celdaSalida = fila.querySelector('.precio-publico');
+      if (!celdaSalida) return;
+  
+      const valor = input.value.trim();
+      if (valor === '') {
+        limpiarOutput(input);
+        return;
+      }
+  
+      const costo = parseFloat(valor);
+      if (isNaN(costo)) {
+        celdaSalida.innerHTML = '<span class="error">Valor inválido</span>';
+        return;
+      }
+  
+      const normal = costo * (1 + ganancia) * (1 + iva);
+      const redondeado = Math.round(normal);
+      const idUnico = `valor-${index}`;
+  
+      // Inserta el HTML sin el onclick
+      celdaSalida.innerHTML = `
+        <div class="precio-normal">$${normal.toFixed(2)}</div>
+        <div class="precio-redondeado">
+          <strong>Redondeado → </strong>
+          <span id="${idUnico}" class="valor-redondeado animable">$${redondeado}</span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+      `;
+  
+      // Animación
+      const valorSpan = celdaSalida.querySelector('.valor-redondeado');
+      valorSpan.classList.remove('animado');
+      void valorSpan.offsetWidth;
+      valorSpan.classList.add('animado');
+  
+      // Asignar evento de copiar después de renderizar
+      const boton = celdaSalida.querySelector('.copy-btn');
+      boton.addEventListener('click', () => copiarAlPortapapeles(idUnico, boton));
+    }
+  
+    function copiarAlPortapapeles(id, boton) {
+      const texto = document.getElementById(id)?.textContent;
+      if (!texto) return;
+  
+      navigator.clipboard.writeText(texto).then(() => {
+        boton.textContent = "Copiado ✔";
+        boton.style.backgroundColor = "#4caf50";
+        boton.style.color = "#fff";
+        setTimeout(() => {
+          boton.textContent = "Copiar";
+          boton.style.backgroundColor = "";
+          boton.style.color = "";
+        }, 2000);
+      }).catch(() => {
+        boton.textContent = "Error ❌";
+      });
+    }
+  </script>
+  
+</body>
+</html>
